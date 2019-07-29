@@ -11,12 +11,13 @@ from PIL import Image
 def normalizer(img_array, max_val):
 	return img_array*255/max_val
 
-direc = '/media/fabricio/3080a9d6-42b5-49bf-9758-d039b354b703/reconstructed/cabana/tomo-set-1-combined'
+direc = '/media/fabricio/SANDISK/ts1-projections/'
+savedir = '/media/fabricio/SANDISK/ts1-projections/combined/'
 
 try:
-	tif_stack_e1 = io.imread(direc+'/Al.tiff')
-	tif_stack_e2 = io.imread(direc+'/Co.tiff')
-	tif_stack_e3 = io.imread(direc+'/Mn.tiff')
+	tif_stack_e1 = io.imread(direc+'/Al.tif')
+	tif_stack_e2 = io.imread(direc+'/Co.tif')
+	tif_stack_e3 = io.imread(direc+'/Mn.tif')
 except:
 	print("no valid directory")
 
@@ -46,10 +47,9 @@ height = tif_stack_e1.shape[2]
 for i in range(depth):
 	rgbArray = np.zeros((width,height,3), 'uint8')
 
-
-	red = normalizer(tif_stack_e1[i], max_val)
-	green = normalizer(tif_stack_e2[i], max_val)
-	blue = normalizer(tif_stack_e3[i], max_val)
+	red = normalizer(tif_stack_e1[i], max_val)*400
+	green = normalizer(tif_stack_e2[i], max_val)*1
+	blue = normalizer(tif_stack_e3[i], max_val)*2
 	print(tif_stack_e1[i].max(),tif_stack_e2[i].max(),tif_stack_e3[i].max())
 
 	rgbArray[:,:,0] = red
@@ -58,8 +58,8 @@ for i in range(depth):
 
 	img = Image.fromarray(rgbArray)
 	# img.show()
-	savedir = '/home/fabricio/Desktop/combined/'
-	img.save(savedir+'combined_{}.jpeg'.format(i))
+	# savedir = '/home/fabricio/Desktop/combined/'
+	img.save(savedir+'AlCoMn_combined_{}.jpeg'.format(i))
 
 
 
